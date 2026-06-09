@@ -37,9 +37,6 @@ export function ToolCard({ tool }: { tool: Tool }) {
     </div>
   );
 
-  if (!tool.implemented) {
-    return <div className="opacity-70 cursor-not-allowed">{inner}</div>;
-  }
   return (
     <Link to="/tools/$slug" params={{ slug: tool.slug }} className="block h-full">
       {inner}
