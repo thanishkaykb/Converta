@@ -10,13 +10,7 @@ import { toast } from "sonner";
 import { ResultPanel } from "./ResultPanel";
 import { logHistory } from "@/lib/history";
 
-// Strategy: rasterize each page by re-encoding embedded images via re-saving with
-// pdf-lib + image re-compression of images we can extract. Since pdf-lib can't
-// recompress embedded streams arbitrarily, we use a more reliable approach:
-// rasterize each PDF page to a JPEG via pdfjs, then rebuild a new PDF.
-import * as pdfjs from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
 const QUALITY: Record<string, { scale: number; jpeg: number; label: string }> = {
   low: { scale: 1.0, jpeg: 0.55, label: "Smaller file · lower quality" },
@@ -35,6 +29,10 @@ export function CompressPdfTool() {
     const file = files[0]; if (!file) return;
     setWorking(true); setProgress(5);
     try {
+      // PDF.js touches browser-only APIs, so load it only after the user starts
+      // compression in the browser. This keeps SSR/tool routing from blanking.
+      const pdfjs = await import("pdfjs-dist");
+      pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
       const buf = await file.arrayBuffer();
       const doc = await pdfjs.getDocument({ data: new Uint8Array(buf) }).promise;
       const out = await PDFDocument.create();
