@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      tool_history: {
+        Row: {
+          created_at: string
+          file_names: string[]
+          id: string
+          output_name: string | null
+          output_size: number | null
+          tool_name: string
+          tool_slug: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_names?: string[]
+          id?: string
+          output_name?: string | null
+          output_size?: number | null
+          tool_name: string
+          tool_slug: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          file_names?: string[]
+          id?: string
+          output_name?: string | null
+          output_size?: number | null
+          tool_name?: string
+          tool_slug?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
