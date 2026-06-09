@@ -1,4 +1,5 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import type { ComponentType } from "react";
 import { getTool } from "@/lib/tools";
 import { ToolPageShell } from "@/components/site/ToolPageShell";
 import { MergePdfTool } from "@/tools/MergePdfTool";
@@ -10,23 +11,21 @@ import { CompressImageTool } from "@/tools/CompressImageTool";
 import { ComingSoon } from "@/tools/ComingSoon";
 
 export const Route = createFileRoute("/tools/$slug")({
-  loader: ({ params }) => {
+  head: ({ params }) => {
     const tool = getTool(params.slug);
-    if (!tool) throw notFound();
-    return { tool };
+    return {
+      meta: [
+        { title: `${tool?.name ?? "Tool"} — PixelForge` },
+        { name: "description", content: tool?.description ?? "Process PDFs and images privately in your browser with PixelForge." },
+      ],
+    };
   },
-  head: ({ loaderData }) => ({
-    meta: loaderData ? [
-      { title: `${loaderData.tool.name} — PixelForge` },
-      { name: "description", content: loaderData.tool.description },
-    ] : [],
-  }),
   component: ToolRoute,
   notFoundComponent: () => <div className="p-10 text-center">Tool not found.</div>,
   errorComponent: ({ error }) => <div className="p-10 text-center text-destructive">{error.message}</div>,
 });
 
-const REGISTRY: Record<string, React.ComponentType> = {
+const REGISTRY: Record<string, ComponentType> = {
   "merge-pdf": MergePdfTool,
   "split-pdf": SplitPdfTool,
   "compress-pdf": CompressPdfTool,
@@ -36,7 +35,13 @@ const REGISTRY: Record<string, React.ComponentType> = {
 };
 
 function ToolRoute() {
-  const { tool } = Route.useLoaderData();
+  const { slug } = Route.useParams();
+  const tool = getTool(slug);
+
+  if (!tool) {
+    return <div className="p-10 text-center">Tool not found.</div>;
+  }
+
   const Comp = REGISTRY[tool.slug] ?? ComingSoon;
   return (
     <ToolPageShell tool={tool}>
