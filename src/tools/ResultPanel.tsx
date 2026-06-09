@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Download, RotateCcw } from "lucide-react";
 import { formatBytes, downloadBlob } from "@/lib/format";
+import type { ReactNode } from "react";
 
 interface Props {
   filename: string;
   blob: Blob;
   originalSize?: number;
   onReset: () => void;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export function ResultPanel({ filename, blob, originalSize, onReset, children }: Props) {
