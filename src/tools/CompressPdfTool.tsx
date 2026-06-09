@@ -15,7 +15,6 @@ import { logHistory } from "@/lib/history";
 // recompress embedded streams arbitrarily, we use a more reliable approach:
 // rasterize each PDF page to a JPEG via pdfjs, then rebuild a new PDF.
 import * as pdfjs from "pdfjs-dist";
-// @ts-expect-error - worker has no types
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
