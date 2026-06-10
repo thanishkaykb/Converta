@@ -14,6 +14,7 @@ import { ResultPanel } from "./ResultPanel";
 import { ImageStage, canvasToBlob, defaultStageSettings, drawImageToCanvas, type ImageStageSettings } from "./ImageStage";
 import { logHistory } from "@/lib/history";
 import type { Tool } from "@/lib/tools";
+import type { Accept } from "react-dropzone";
 
 type Result = { blob: Blob; name: string; originalSize?: number };
 
@@ -80,7 +81,9 @@ export function UniversalTool({ tool }: { tool: Tool }) {
   const [height, setHeight] = useState(1080);
 
   const isImageTool = useMemo(() => tool.category === "image" || ["photo-enhancer", "background-remover", "colorize-photo", "restore-photo"].includes(tool.slug), [tool]);
-  const accept = isImageTool ? { "image/*": [".jpg", ".jpeg", ".png", ".webp"] } : { "application/pdf": [".pdf"], "image/*": [".jpg", ".jpeg", ".png", ".webp"], "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"], "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"], "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"], "text/html": [".html"] };
+  const accept: Accept = isImageTool
+    ? { "image/*": [".jpg", ".jpeg", ".png", ".webp"] }
+    : { "application/pdf": [".pdf"], "image/*": [".jpg", ".jpeg", ".png", ".webp"], "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"], "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"], "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"], "text/html": [".html"] };
 
   async function runImageTool(file: File): Promise<Result> {
     const base = file.name.replace(/\.[^.]+$/, "");
