@@ -9,7 +9,7 @@ export function Footer() {
             <div className="grid h-8 w-8 place-items-center rounded-lg bg-cta">
               <Sparkles className="h-4 w-4 text-white" />
             </div>
-            <span className="font-display text-lg font-bold">PixelForge</span>
+            <span className="font-display text-lg font-bold">Converta</span>
           </div>
           <p className="text-sm text-muted-foreground">
             Every tool for your PDFs and images — in one place. Free, fast, and private.
@@ -20,7 +20,7 @@ export function Footer() {
         <FooterCol title="Company" items={["About", "Pricing", "Privacy", "Terms"]} />
       </div>
       <div className="border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} PixelForge. Files are processed in your browser — they never leave your device.
+        © {new Date().getFullYear()} Converta. Files are processed in your browser — they never leave your device.
       </div>
     </footer>
   );

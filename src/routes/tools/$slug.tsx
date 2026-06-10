@@ -8,7 +8,7 @@ import { CompressPdfTool } from "@/tools/CompressPdfTool";
 import { JpgToPdfTool } from "@/tools/JpgToPdfTool";
 import { ResizeImageTool } from "@/tools/ResizeImageTool";
 import { CompressImageTool } from "@/tools/CompressImageTool";
-import { ComingSoon } from "@/tools/ComingSoon";
+import { UniversalTool } from "@/tools/UniversalTool";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
@@ -16,7 +16,8 @@ export const Route = createFileRoute("/tools/$slug")({
     return {
       meta: [
         { title: `${tool?.name ?? "Tool"} — PixelForge` },
-        { name: "description", content: tool?.description ?? "Process PDFs and images privately in your browser with PixelForge." },
+        { title: `${tool?.name ?? "Tool"} — Converta` },
+        { name: "description", content: tool?.description ?? "Process PDFs and images privately in your browser with Converta." },
       ],
     };
   },
@@ -42,10 +43,10 @@ function ToolRoute() {
     return <div className="p-10 text-center">Tool not found.</div>;
   }
 
-  const Comp = REGISTRY[tool.slug] ?? ComingSoon;
+  const Comp = REGISTRY[tool.slug];
   return (
     <ToolPageShell tool={tool}>
-      <Comp />
+      {Comp ? <Comp /> : <UniversalTool tool={tool} />}
     </ToolPageShell>
   );
 }

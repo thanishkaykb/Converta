@@ -15,19 +15,16 @@ export interface Tool {
   category: ToolCategory;
   icon: LucideIcon;
   section: string;
-  implemented?: boolean;
 }
 
 export const TOOLS: Tool[] = [
-  // Implemented core 6
-  { slug: "merge-pdf", name: "Merge PDF", description: "Combine PDFs into one file in your preferred order.", category: "pdf", icon: Merge, section: "Organize", implemented: true },
-  { slug: "split-pdf", name: "Split PDF", description: "Extract a page range or split into separate PDFs.", category: "pdf", icon: Scissors, section: "Organize", implemented: true },
-  { slug: "compress-pdf", name: "Compress PDF", description: "Reduce PDF file size while keeping the best quality.", category: "pdf", icon: Minimize2, section: "Optimize", implemented: true },
-  { slug: "jpg-to-pdf", name: "JPG to PDF", description: "Convert images to PDF — set orientation and margin.", category: "convert", icon: FileImage, section: "Convert to PDF", implemented: true },
-  { slug: "resize-image", name: "Resize Image", description: "Custom size or social media presets, batch ZIP download.", category: "image", icon: Maximize2, section: "Resize & Convert", implemented: true },
-  { slug: "compress-image", name: "Compress Image", description: "Shrink JPG, PNG and WebP with a quality slider.", category: "image", icon: ImageIcon, section: "Optimize", implemented: true },
+  { slug: "merge-pdf", name: "Merge PDF", description: "Combine PDFs into one file in your preferred order.", category: "pdf", icon: Merge, section: "Organize" },
+  { slug: "split-pdf", name: "Split PDF", description: "Extract a page range or split into separate PDFs.", category: "pdf", icon: Scissors, section: "Organize" },
+  { slug: "compress-pdf", name: "Compress PDF", description: "Reduce PDF file size while keeping the best quality.", category: "pdf", icon: Minimize2, section: "Optimize" },
+  { slug: "jpg-to-pdf", name: "JPG to PDF", description: "Convert images to PDF — set orientation and margin.", category: "convert", icon: FileImage, section: "Convert to PDF" },
+  { slug: "resize-image", name: "Resize Image", description: "Custom size or social media presets, batch ZIP download.", category: "image", icon: Maximize2, section: "Resize & Convert" },
+  { slug: "compress-image", name: "Compress Image", description: "Shrink JPG, PNG and WebP with a quality slider.", category: "image", icon: ImageIcon, section: "Optimize" },
 
-  // PDF — coming soon scaffolds
   { slug: "remove-pages", name: "Remove Pages", description: "Visually select pages to delete from your PDF.", category: "pdf", icon: Eraser, section: "Organize" },
   { slug: "organize-pdf", name: "Organize PDF", description: "Drag and rearrange the pages of your PDF.", category: "pdf", icon: Shuffle, section: "Organize" },
   { slug: "repair-pdf", name: "Repair PDF", description: "Try to recover a damaged PDF file.", category: "pdf", icon: FileCheck, section: "Optimize" },
@@ -49,7 +46,6 @@ export const TOOLS: Tool[] = [
   { slug: "redact-pdf", name: "Redact PDF", description: "Black out sensitive content permanently.", category: "pdf", icon: EraserIcon, section: "Edit" },
   { slug: "sign-pdf", name: "Sign PDF", description: "Draw, type or upload your signature.", category: "pdf", icon: PenTool, section: "Edit" },
 
-  // Image — coming soon scaffolds
   { slug: "convert-image", name: "Convert Image", description: "JPG ↔ PNG ↔ WebP, HEIC to JPG and more.", category: "image", icon: ImagePlus, section: "Resize & Convert" },
   { slug: "bulk-compress", name: "Bulk Compress", description: "Compress many images at once, download ZIP.", category: "image", icon: ArrowDownToLine, section: "Optimize" },
   { slug: "photo-enhancer", name: "Photo Enhancer", description: "AI auto-enhance, upscale, denoise and sharpen.", category: "ai", icon: Wand2, section: "Enhance" },

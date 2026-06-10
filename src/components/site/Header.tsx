@@ -19,7 +19,7 @@ export function Header() {
             <Sparkles className="h-5 w-5 text-white" />
           </div>
           <span className="font-display text-xl font-bold tracking-tight">
-            Pixel<span className="text-gradient">Forge</span>
+            Con<span className="text-gradient">verta</span>
           </span>
         </Link>
 

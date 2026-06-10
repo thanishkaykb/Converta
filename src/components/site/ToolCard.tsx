@@ -29,9 +29,6 @@ export function ToolCard({ tool }: { tool: Tool }) {
       </div>
       <div className="font-display font-semibold text-base mb-1 flex items-center gap-2">
         {tool.name}
-        {!tool.implemented && (
-          <span className="text-[10px] uppercase tracking-wider rounded px-1.5 py-0.5 bg-muted text-muted-foreground">soon</span>
-        )}
       </div>
       <p className="text-sm text-muted-foreground leading-relaxed">{tool.description}</p>
     </div>
