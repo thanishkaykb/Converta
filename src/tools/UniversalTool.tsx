@@ -171,14 +171,18 @@ export function UniversalTool({ tool }: { tool: Tool }) {
       if (password !== password2) throw new Error("Passwords do not match.");
       const { PDFDocument: CantooPDF } = await import("@cantoo/pdf-lib");
       const doc = await CantooPDF.load(bytes, { ignoreEncryption: true });
-      const out = await doc.save({ userPassword: password, ownerPassword: password } as never);
+      doc.encrypt({ userPassword: password, ownerPassword: password });
+      const out = await doc.save({ useObjectStreams: false });
       return { blob: new Blob([out as BlobPart], { type: "application/pdf" }), name: `${base}-protected.pdf` };
     }
 
     if (slug === "unlock-pdf") {
+      if (!password) throw new Error("Enter the PDF's current password.");
       const { PDFDocument: CantooPDF } = await import("@cantoo/pdf-lib");
       const doc = await CantooPDF.load(bytes, { password, ignoreEncryption: true } as never);
-      const out = await doc.save();
+      const fresh = await CantooPDF.create();
+      (await fresh.copyPages(doc, doc.getPageIndices())).forEach((p) => fresh.addPage(p));
+      const out = await fresh.save();
       return { blob: new Blob([out as BlobPart], { type: "application/pdf" }), name: `${base}-unlocked.pdf` };
     }
 
