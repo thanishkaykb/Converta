@@ -15,7 +15,6 @@ export const Route = createFileRoute("/tools/$slug")({
     const tool = getTool(params.slug);
     return {
       meta: [
-        { title: `${tool?.name ?? "Tool"} — PixelForge` },
         { title: `${tool?.name ?? "Tool"} — Converta` },
         { name: "description", content: tool?.description ?? "Process PDFs and images privately in your browser with Converta." },
       ],
