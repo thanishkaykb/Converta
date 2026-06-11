@@ -151,13 +151,13 @@ export function UniversalTool({ tool }: { tool: Tool }) {
   const multiple = ["bulk-compress", "ocr-pdf"].includes(slug);
 
   const accept: Accept = useMemo(() => {
-    if (isImageTool) return { "image/*": [".jpg", ".jpeg", ".png", ".webp"] };
-    if (slug === "word-to-pdf") return { "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"] };
-    if (slug === "excel-to-pdf") return { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx", ".xls" ] as string[] };
-    if (slug === "powerpoint-to-pdf") return { "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"] };
-    if (slug === "html-to-pdf") return { "text/html": [".html", ".htm"] };
-    if (slug === "ocr-pdf") return { "application/pdf": [".pdf"], "image/*": [".jpg", ".jpeg", ".png", ".webp"] };
-    return { "application/pdf": [".pdf"] };
+    if (isImageTool) return { "image/*": [".jpg", ".jpeg", ".png", ".webp"] } as Accept;
+    if (slug === "word-to-pdf") return { "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"] } as Accept;
+    if (slug === "excel-to-pdf") return { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx", ".xls"] } as Accept;
+    if (slug === "powerpoint-to-pdf") return { "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"] } as Accept;
+    if (slug === "html-to-pdf") return { "text/html": [".html", ".htm"] } as Accept;
+    if (slug === "ocr-pdf") return { "application/pdf": [".pdf"], "image/*": [".jpg", ".jpeg", ".png", ".webp"] } as Accept;
+    return { "application/pdf": [".pdf"] } as Accept;
   }, [slug, isImageTool]);
 
   /* -------- PDF tools -------- */
