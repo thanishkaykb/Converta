@@ -14,7 +14,7 @@ const searchSchema = z.object({ mode: z.enum(["login", "signup"]).optional() });
 
 export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
-  head: () => ({ meta: [{ title: "Sign in — PixelForge" }] }),
+  head: () => ({ meta: [{ title: "Sign in — Converta" }] }),
   component: AuthPage,
 });
 
@@ -79,7 +79,7 @@ function AuthPage() {
               <Sparkles className="h-5 w-5 text-white" />
             </div>
             <span className="font-display text-2xl font-bold">
-              Pixel<span className="text-gradient">Forge</span>
+              Con<span className="text-gradient">verta</span>
             </span>
           </div>
 
@@ -132,7 +132,7 @@ function AuthPage() {
           </div>
 
           <p className="text-center text-xs text-muted-foreground mt-6">
-            You don't need an account to use PixelForge — sign in only to save your history.
+            You don't need an account to use Converta — sign in only to save your history.
           </p>
         </div>
       </div>
