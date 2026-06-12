@@ -46,7 +46,7 @@
 :root {
   --radius: 0.75rem;
 
-  /* PixelForge dark palette */
+  /* Converta dark palette */
   --background: oklch(0.16 0.03 265);       /* #0A0F1E navy */
   --foreground: oklch(0.97 0.01 250);
   --card: oklch(0.21 0.035 265);            /* #131929 surface */
