@@ -584,6 +584,19 @@ export function UniversalTool({ tool }: { tool: Tool }) {
         <ImageStage file={files[0]} aspectW={width} aspectH={height} settings={stage} onChange={setStage} overlayLabel={`${width} × ${height}`} />
       )}
 
+      {showPdfPreview && (
+        <PdfPagesPreview
+          file={files[0]}
+          title={slug === "organize-pdf" ? "Drag page order with the arrows" : "PDF preview"}
+          order={slug === "organize-pdf" ? pageOrder : undefined}
+          onOrderChange={slug === "organize-pdf" ? setPageOrder : undefined}
+          selectedPages={slug === "remove-pages" ? selectedPages : undefined}
+          onTogglePage={slug === "remove-pages" ? toggleSelectedPage : undefined}
+          selectionLabel="Remove"
+          overlay={pdfOverlay}
+        />
+      )}
+
       {files.length > 0 && (
         <div className="rounded-xl border border-border bg-card p-5 grid gap-4 sm:grid-cols-2">
           {/* PDF page selections */}
