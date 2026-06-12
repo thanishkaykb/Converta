@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { PDFDocument, StandardFonts, degrees, rgb } from "pdf-lib";
 import JSZip from "jszip";
 import imageCompression from "browser-image-compression";
@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { ResultPanel } from "./ResultPanel";
 import { ImageStage, canvasToBlob, defaultStageSettings, drawImageToCanvas, type ImageStageSettings } from "./ImageStage";
+import { PdfPagesPreview, type PdfPagePreview } from "./PdfPagesPreview";
 import { logHistory } from "@/lib/history";
 import type { Tool } from "@/lib/tools";
 import type { Accept } from "react-dropzone";
