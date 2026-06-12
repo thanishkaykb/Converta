@@ -546,7 +546,7 @@ export function UniversalTool({ tool }: { tool: Tool }) {
   /* -------- options UI -------- */
 
   const showStage = files[0] && ["crop-image", "resize-image"].includes(slug);
-  const showPdfPreview = files[0] && !isImageTool && !["sign-pdf"].includes(slug) && accept["application/pdf"];
+  const showPdfPreview = files[0]?.type === "application/pdf" && !isImageTool && !["sign-pdf"].includes(slug) && accept["application/pdf"];
   const toggleSelectedPage = (pageNumber: number) => {
     setSelectedPages((current) => {
       const next = new Set(current);
