@@ -8,6 +8,7 @@ import { CompressPdfTool } from "@/tools/CompressPdfTool";
 import { JpgToPdfTool } from "@/tools/JpgToPdfTool";
 import { ResizeImageTool } from "@/tools/ResizeImageTool";
 import { CompressImageTool } from "@/tools/CompressImageTool";
+import { SignPdfTool } from "@/tools/SignPdfTool";
 import { UniversalTool } from "@/tools/UniversalTool";
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -32,6 +33,7 @@ const REGISTRY: Record<string, ComponentType> = {
   "jpg-to-pdf": JpgToPdfTool,
   "resize-image": ResizeImageTool,
   "compress-image": CompressImageTool,
+  "sign-pdf": SignPdfTool,
 };
 
 function ToolRoute() {
