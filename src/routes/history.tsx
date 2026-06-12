@@ -7,7 +7,7 @@ import { formatBytes } from "@/lib/format";
 import { History as HistoryIcon, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/history")({
-  head: () => ({ meta: [{ title: "My history — PixelForge" }] }),
+  head: () => ({ meta: [{ title: "My history — Converta" }] }),
   component: HistoryPage,
 });
 
