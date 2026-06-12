@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { PDFDocument, StandardFonts, degrees, rgb } from "pdf-lib";
 import JSZip from "jszip";
 import imageCompression from "browser-image-compression";
@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { ResultPanel } from "./ResultPanel";
 import { ImageStage, canvasToBlob, defaultStageSettings, drawImageToCanvas, type ImageStageSettings } from "./ImageStage";
+import { PdfPagesPreview, type PdfPagePreview } from "./PdfPagesPreview";
 import { logHistory } from "@/lib/history";
 import type { Tool } from "@/lib/tools";
 import type { Accept } from "react-dropzone";
@@ -120,6 +121,8 @@ export function UniversalTool({ tool }: { tool: Tool }) {
   const [progress, setProgress] = useState(0);
   const [working, setWorking] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
+  const [pageOrder, setPageOrder] = useState<number[]>([]);
+  const [selectedPages, setSelectedPages] = useState<Set<number>>(new Set());
 
   // shared option states
   const [pagesText, setPagesText] = useState("");
@@ -149,6 +152,13 @@ export function UniversalTool({ tool }: { tool: Tool }) {
     [tool, slug],
   );
   const multiple = ["bulk-compress", "ocr-pdf"].includes(slug);
+
+  useEffect(() => {
+    setPageOrder([]);
+    setSelectedPages(new Set());
+    setPagesText("");
+    setResult(null);
+  }, [files[0], slug]);
 
   const accept: Accept = useMemo(() => {
     if (isImageTool) return { "image/*": [".jpg", ".jpeg", ".png", ".webp"] } as Accept;
@@ -198,7 +208,7 @@ export function UniversalTool({ tool }: { tool: Tool }) {
     const total = pdf.getPageCount();
 
     if (slug === "remove-pages") {
-      const toRemove = parsePages(pagesText, total);
+      const toRemove = selectedPages.size ? [...selectedPages].map((n) => n - 1).sort((a, b) => a - b) : parsePages(pagesText, total);
       if (!toRemove.length) throw new Error("Enter the pages to remove, e.g. 2, 4-6.");
       if (toRemove.length >= total) throw new Error("You can't remove every page.");
       const out = await PDFDocument.create();
@@ -208,7 +218,9 @@ export function UniversalTool({ tool }: { tool: Tool }) {
     }
 
     if (slug === "organize-pdf") {
-      const order = pagesText.split(",").map((n) => +n.trim() - 1).filter((n) => Number.isInteger(n) && n >= 0 && n < total);
+      const order = pageOrder.length
+        ? pageOrder.map((n) => n - 1).filter((n) => Number.isInteger(n) && n >= 0 && n < total)
+        : pagesText.split(",").map((n) => +n.trim() - 1).filter((n) => Number.isInteger(n) && n >= 0 && n < total);
       if (!order.length) throw new Error(`Enter the new page order, e.g. 3,1,2 (this PDF has ${total} pages).`);
       const out = await PDFDocument.create();
       (await out.copyPages(pdf, order)).forEach((p) => out.addPage(p));
@@ -534,7 +546,33 @@ export function UniversalTool({ tool }: { tool: Tool }) {
   /* -------- options UI -------- */
 
   const showStage = files[0] && ["crop-image", "resize-image"].includes(slug);
-  const field = (label: string, node: React.ReactNode, full = false) => (
+  const showPdfPreview = files[0]?.type === "application/pdf" && !isImageTool && !["sign-pdf"].includes(slug) && accept["application/pdf"];
+  const toggleSelectedPage = (pageNumber: number) => {
+    setSelectedPages((current) => {
+      const next = new Set(current);
+      next.has(pageNumber) ? next.delete(pageNumber) : next.add(pageNumber);
+      return next;
+    });
+  };
+  const pdfOverlay = (_page: PdfPagePreview) => {
+    if (slug === "crop-pdf") {
+      return <div className="pointer-events-none absolute inset-0" style={{ boxShadow: `inset ${(margin.left / 100) * 240}px ${(margin.top / 100) * 320}px 0 rgba(0,0,0,.28), inset -${(margin.right / 100) * 240}px -${(margin.bottom / 100) * 320}px 0 rgba(0,0,0,.28)` }} />;
+    }
+    if (slug === "redact-pdf") {
+      return <div className="pointer-events-none absolute bg-black" style={{ left: `${rect.x}%`, top: `${rect.y}%`, width: `${rect.w}%`, height: `${rect.h}%` }} />;
+    }
+    if (slug === "watermark-pdf" && wmText.trim()) {
+      const base = "pointer-events-none absolute rounded px-1 text-center font-bold text-slate-600";
+      const style = { opacity: wmOpacity, fontSize: `${Math.max(10, wmSize / 4)}px` };
+      const pos = position === "top-left" ? "left-3 top-3" : position === "top-right" ? "right-3 top-3" : position === "bottom-left" ? "bottom-3 left-3" : position === "bottom-right" ? "bottom-3 right-3" : position === "bottom-center" ? "bottom-3 left-1/2 -translate-x-1/2" : "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-25deg]";
+      return <div className={`${base} ${pos}`} style={style}>{wmText}</div>;
+    }
+    if (slug === "page-numbers") {
+      return <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded bg-background/80 px-1.5 py-0.5 text-[10px] font-semibold text-foreground">#</div>;
+    }
+    return null;
+  };
+  const field = (label: string, node: ReactNode, full = false) => (
     <div className={full ? "sm:col-span-2" : ""}><Label>{label}</Label><div className="mt-1.5">{node}</div></div>
   );
 
@@ -544,6 +582,19 @@ export function UniversalTool({ tool }: { tool: Tool }) {
 
       {showStage && (
         <ImageStage file={files[0]} aspectW={width} aspectH={height} settings={stage} onChange={setStage} overlayLabel={`${width} × ${height}`} />
+      )}
+
+      {showPdfPreview && (
+        <PdfPagesPreview
+          file={files[0]}
+          title={slug === "organize-pdf" ? "Drag page order with the arrows" : "PDF preview"}
+          order={slug === "organize-pdf" ? pageOrder : undefined}
+          onOrderChange={slug === "organize-pdf" ? setPageOrder : undefined}
+          selectedPages={slug === "remove-pages" ? selectedPages : undefined}
+          onTogglePage={slug === "remove-pages" ? toggleSelectedPage : undefined}
+          selectionLabel="Remove"
+          overlay={pdfOverlay}
+        />
       )}
 
       {files.length > 0 && (
