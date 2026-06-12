@@ -546,7 +546,33 @@ export function UniversalTool({ tool }: { tool: Tool }) {
   /* -------- options UI -------- */
 
   const showStage = files[0] && ["crop-image", "resize-image"].includes(slug);
-  const field = (label: string, node: React.ReactNode, full = false) => (
+  const showPdfPreview = files[0] && !isImageTool && !["sign-pdf"].includes(slug) && accept["application/pdf"];
+  const toggleSelectedPage = (pageNumber: number) => {
+    setSelectedPages((current) => {
+      const next = new Set(current);
+      next.has(pageNumber) ? next.delete(pageNumber) : next.add(pageNumber);
+      return next;
+    });
+  };
+  const pdfOverlay = (_page: PdfPagePreview) => {
+    if (slug === "crop-pdf") {
+      return <div className="pointer-events-none absolute inset-0" style={{ boxShadow: `inset ${(margin.left / 100) * 240}px ${(margin.top / 100) * 320}px 0 rgba(0,0,0,.28), inset -${(margin.right / 100) * 240}px -${(margin.bottom / 100) * 320}px 0 rgba(0,0,0,.28)` }} />;
+    }
+    if (slug === "redact-pdf") {
+      return <div className="pointer-events-none absolute bg-black" style={{ left: `${rect.x}%`, top: `${rect.y}%`, width: `${rect.w}%`, height: `${rect.h}%` }} />;
+    }
+    if (slug === "watermark-pdf" && wmText.trim()) {
+      const base = "pointer-events-none absolute rounded px-1 text-center font-bold text-slate-600";
+      const style = { opacity: wmOpacity, fontSize: `${Math.max(10, wmSize / 4)}px` };
+      const pos = position === "top-left" ? "left-3 top-3" : position === "top-right" ? "right-3 top-3" : position === "bottom-left" ? "bottom-3 left-3" : position === "bottom-right" ? "bottom-3 right-3" : position === "bottom-center" ? "bottom-3 left-1/2 -translate-x-1/2" : "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-25deg]";
+      return <div className={`${base} ${pos}`} style={style}>{wmText}</div>;
+    }
+    if (slug === "page-numbers") {
+      return <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded bg-background/80 px-1.5 py-0.5 text-[10px] font-semibold text-foreground">#</div>;
+    }
+    return null;
+  };
+  const field = (label: string, node: ReactNode, full = false) => (
     <div className={full ? "sm:col-span-2" : ""}><Label>{label}</Label><div className="mt-1.5">{node}</div></div>
   );
 
