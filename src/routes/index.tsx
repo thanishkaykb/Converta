@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PixelForge — Every tool for your PDFs & images" },
+      { title: "Converta — Every tool for your PDFs & images" },
       { name: "description", content: "Free online PDF and image tools. Merge, split, compress, convert, resize and enhance — all in your browser." },
-      { property: "og:title", content: "PixelForge — Every tool for your PDFs & images" },
+      { property: "og:title", content: "Converta — Every tool for your PDFs & images" },
       { property: "og:description", content: "Free PDF & image tools, processed privately in your browser." },
     ],
   }),
