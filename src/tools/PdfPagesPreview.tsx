@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ArrowDown, ArrowUp, Eye, Loader2 } from "lucide-react";
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ export function PdfPagesPreview({
   selectedPages?: Set<number>;
   onTogglePage?: (pageNumber: number) => void;
   selectionLabel?: string;
-  overlay?: (page: PdfPagePreview) => React.ReactNode;
+  overlay?: (page: PdfPagePreview) => ReactNode;
 }) {
   const [pages, setPages] = useState<PdfPagePreview[]>([]);
   const [loading, setLoading] = useState(true);
