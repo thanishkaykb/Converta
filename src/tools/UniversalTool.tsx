@@ -208,7 +208,7 @@ export function UniversalTool({ tool }: { tool: Tool }) {
     const total = pdf.getPageCount();
 
     if (slug === "remove-pages") {
-      const toRemove = parsePages(pagesText, total);
+      const toRemove = selectedPages.size ? [...selectedPages].map((n) => n - 1).sort((a, b) => a - b) : parsePages(pagesText, total);
       if (!toRemove.length) throw new Error("Enter the pages to remove, e.g. 2, 4-6.");
       if (toRemove.length >= total) throw new Error("You can't remove every page.");
       const out = await PDFDocument.create();
@@ -218,7 +218,9 @@ export function UniversalTool({ tool }: { tool: Tool }) {
     }
 
     if (slug === "organize-pdf") {
-      const order = pagesText.split(",").map((n) => +n.trim() - 1).filter((n) => Number.isInteger(n) && n >= 0 && n < total);
+      const order = pageOrder.length
+        ? pageOrder.map((n) => n - 1).filter((n) => Number.isInteger(n) && n >= 0 && n < total)
+        : pagesText.split(",").map((n) => +n.trim() - 1).filter((n) => Number.isInteger(n) && n >= 0 && n < total);
       if (!order.length) throw new Error(`Enter the new page order, e.g. 3,1,2 (this PDF has ${total} pages).`);
       const out = await PDFDocument.create();
       (await out.copyPages(pdf, order)).forEach((p) => out.addPage(p));
