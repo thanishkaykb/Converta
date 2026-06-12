@@ -121,6 +121,8 @@ export function UniversalTool({ tool }: { tool: Tool }) {
   const [progress, setProgress] = useState(0);
   const [working, setWorking] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
+  const [pageOrder, setPageOrder] = useState<number[]>([]);
+  const [selectedPages, setSelectedPages] = useState<Set<number>>(new Set());
 
   // shared option states
   const [pagesText, setPagesText] = useState("");
@@ -150,6 +152,13 @@ export function UniversalTool({ tool }: { tool: Tool }) {
     [tool, slug],
   );
   const multiple = ["bulk-compress", "ocr-pdf"].includes(slug);
+
+  useEffect(() => {
+    setPageOrder([]);
+    setSelectedPages(new Set());
+    setPagesText("");
+    setResult(null);
+  }, [files[0], slug]);
 
   const accept: Accept = useMemo(() => {
     if (isImageTool) return { "image/*": [".jpg", ".jpeg", ".png", ".webp"] } as Accept;
