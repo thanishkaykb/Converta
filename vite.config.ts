@@ -11,6 +11,7 @@ export default defineConfig({
   // preset so / and deep links like /tools/merge-pdf route through the app.
   nitro: {
     preset: process.env.VERCEL ? "vercel" : undefined,
+    vercel: { entryFormat: "node" },
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
